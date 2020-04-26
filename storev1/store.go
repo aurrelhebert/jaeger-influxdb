@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-	"time"
 
 	"github.com/hashicorp/go-hclog"
-	"github.com/influxdata/influxdb1-client"
+	client "github.com/influxdata/influxdb1-client"
 	"github.com/influxdata/jaeger-influxdb/common"
 	"github.com/influxdata/jaeger-influxdb/config"
 	"github.com/jaegertracing/jaeger/plugin/storage/grpc/shared"
@@ -35,7 +34,7 @@ func NewStore(conf *config.Configuration, logger hclog.Logger) (*Store, func() e
 		URL:       *u,
 		Username:  conf.Username,
 		Password:  conf.Password,
-		Timeout:   5 * time.Second,
+		Timeout:   conf.Timeout,
 		UnsafeSsl: conf.UnsafeSsl,
 		UserAgent: fmt.Sprintf("jaeger-influxdb"),
 	}

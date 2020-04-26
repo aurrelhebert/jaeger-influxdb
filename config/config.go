@@ -18,6 +18,7 @@ const (
 	flagUsername        = influxDBPrefix + "username"
 	flagPassword        = influxDBPrefix + "password"
 	flagUnsafeSsl       = influxDBPrefix + "unsafe_ssl"
+	flagTimeout         = influxDBPrefix + "timeout"
 
 	// InfluxDB v2.x
 	flagToken        = influxDBPrefix + "token" // #nosec
@@ -31,11 +32,12 @@ type Configuration struct {
 	DefaultLookback time.Duration `yaml:"default_lookback"`
 
 	// InfluxDB v1.x
-	Database        string `yaml:"database"`
-	RetentionPolicy string `yaml:"retention_policy"`
-	Username        string `yaml:"username"`
-	Password        string `yaml:"password"`
-	UnsafeSsl       bool   `yaml:"unsafe_ssl"`
+	Database        string        `yaml:"database"`
+	RetentionPolicy string        `yaml:"retention_policy"`
+	Username        string        `yaml:"username"`
+	Password        string        `yaml:"password"`
+	UnsafeSsl       bool          `yaml:"unsafe_ssl"`
+	Timeout         time.Duration `yaml:"timeout"`
 
 	// InfluxDB v2.x
 	Token        string `yaml:"token"`
@@ -47,6 +49,8 @@ type Configuration struct {
 func (c *Configuration) InitFromViper(v *viper.Viper) {
 	c.Host = v.GetString(flagHost)
 	c.DefaultLookback = v.GetDuration(flagDefaultLookback)
+	v.SetDefault(flagTimeout, "5s")
+	c.Timeout = v.GetDuration(flagTimeout)
 
 	c.Database = v.GetString(flagDatabase)
 	c.RetentionPolicy = v.GetString(flagRetentionPolicy)
